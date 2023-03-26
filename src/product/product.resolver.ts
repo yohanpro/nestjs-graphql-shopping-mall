@@ -14,7 +14,7 @@ export class ProductResolver {
   @Mutation(() => Product)
   createProduct(
     @Args('name') name: string,
-    @Args('description') description: string,
+    @Args('description', { nullable: true }) description: string,
     @Args('price') price: number,
   ): Omit<Product, 'id'> {
     return this.productService.create({
