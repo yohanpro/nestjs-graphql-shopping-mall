@@ -2,26 +2,24 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Product } from './entity/product.entity';
 import { ProductService } from './product.service';
 
-@Resolver((of) => Product)
+@Resolver(() => Product)
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
   @Query(() => [Product])
-  products(): Product[] {
-    return this.productService.findAll();
+  async products(): Promise<Product[]> {
+    return await this.productService.findAll();
   }
-
   @Mutation(() => Product)
-  createProduct(
+  async createProduct(
     @Args('name') name: string,
     @Args('description', { nullable: true }) description: string,
     @Args('price') price: number,
-  ): Omit<Product, 'id'> {
-    return this.productService.create({
-      id: Math.random().toString(36).substring(2),
-      name,
-      description,
-      price,
-    });
+  ): Promise<Product> {
+    const product = new Product();
+    product.name = name;
+    product.description = description;
+    product.price = price;
+    return await this.productService.create(product);
   }
 }
