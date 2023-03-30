@@ -9,6 +9,12 @@ type Product {
   price: Float!
 }
 
+type User {
+  id: String!
+  name: String!
+  email: String!
+}
+
 type Query {
   products: [Product!]!
 }
