@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Product } from './entity/product.entity';
 import { ProductService } from './product.service';
+import { ILike } from 'typeorm';
 
 @Resolver(() => Product)
 export class ProductResolver {
@@ -10,6 +11,17 @@ export class ProductResolver {
   async products(): Promise<Product[]> {
     return await this.productService.findAll();
   }
+
+  @Query(() => Product)
+  async findProductById(@Args('id') id: string): Promise<Product> {
+    return await this.productService.findOne(id);
+  }
+
+  @Query(() => [Product])
+  async findProductByName(@Args('name') name: string): Promise<Product[]> {
+    return await this.productService.findByName(name);
+  }
+
   @Mutation(() => Product)
   async createProduct(
     @Args('name') name: string,

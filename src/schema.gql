@@ -17,6 +17,8 @@ type User {
 
 type Query {
   products: [Product!]!
+  findProductById(id: String!): Product!
+  findProductByName(name: String!): [Product!]!
 }
 
 type Mutation {
