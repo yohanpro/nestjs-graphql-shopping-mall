@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike } from 'typeorm';
 import { Product } from './entity/product.entity';
+import { ProductInput } from './product.resolver';
 
 @Injectable()
 export class ProductService {
@@ -28,14 +29,14 @@ export class ProductService {
     return await this.productRepository.save(product);
   }
 
-  async update(id: string, product: Partial<Product>): Promise<Product> {
+  async update(id: string, productInput: ProductInput): Promise<Product> {
     const existingProduct = await this.productRepository.findOne({
       where: { id },
     });
     if (!existingProduct) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
-    const updatedProduct = Object.assign(existingProduct, product);
+    const updatedProduct = Object.assign(existingProduct, productInput);
     return await this.productRepository.save(updatedProduct);
   }
 
